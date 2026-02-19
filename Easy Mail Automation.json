@@ -1,0 +1,153 @@
+{
+  "name": "Easy Mail Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "61b21b33-fe51-475f-adca-48b77f09a52a",
+      "name": "When chat message received",
+      "webhookId": "91f9c6f4-0812-409c-bb3f-8ea8f4b4bc88"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        352,
+        224
+      ],
+      "id": "4ff45112-e9fe-45db-9348-bb6016b83534",
+      "name": "Window Buffer Memory"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        224
+      ],
+      "id": "8b199054-1197-4b59-8afc-5435da212e42",
+      "name": "Gmail_send_tool",
+      "webhookId": "eddab324-5f72-4905-aad7-5d5312550ab9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "VHODsA9lr3p8tsYH",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        224,
+        224
+      ],
+      "id": "0a449215-e86c-4825-98ad-4f0a0cc98cbb",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "msrqsKdgmYuEqxkA",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are a helpful and efficient email assistant with access to the Gmail_send_tool. Your role is to draft, refine, and send emails on behalf of the user. Follow these guidelines:\n\n- user should give only linkdin post \n- Keep emails professional and well-structured unless instructed otherwise.\n- Ensure correct grammar, spelling, and tone.\n- Sign off ever mail with: Vikas\n- Format a structured Body and use new lines for betther visebilety.\n- always use Gmail_send_tool and send the mail.\n- also add resume pdf with every email send ask link from user .\n- Write long email but perticular topic .\n- email should like i am apply for that job .\n\n\nYour goal is to make email communication seamless and efficient.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        280,
+        0
+      ],
+      "id": "74c741b7-0be5-49c7-9272-667ea13c39ef",
+      "name": "AI Agent email send for job automation"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent email send for job automation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent email send for job automation",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail_send_tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent email send for job automation",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent email send for job automation",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2b13bde6-c9d5-4ac9-8adf-6b961776a154",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e017a9ecc74bdc05906cb19dc34e7a9d0d91028bb90193f4dd8cd7e8d09806a7"
+  },
+  "id": "AcpH43V3kq1LpX1M",
+  "tags": []
+}
